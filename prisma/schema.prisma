@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model Employee {
+//   id           Int      @id @default(autoincrement())
+//   name         String
+//   surname      String
+//   availability String[]
+//   over18       Boolean
+//   Transit      Boolean
+//   PitStop      Boolean
+// }
+
+model Employee {
+  id                 Int      @id @default(autoincrement())
+  name               String
+  surname            String
+  age                Int
+  contract           String
+  availability       String[]
+  ladenAufgemacht    Int
+  ladenAufmachen     Boolean
+  ladenGeschlossen   Int
+  ladenSchliessen    Boolean
+  transitAufgemacht  Int
+  transitAufmachen   Boolean
+  transitGeschlossen Int 
+  transitSchliessen  Boolean
+  pitstopAufgemacht  Int
+  pitstopAufmachen   Boolean
+  pitstopGeschlossen Int
+  pitstopSchliessen  Boolean
+}
+
+// model Shop {
+//   id       Int       @id @default(autoincrement())
+//   name     String
+//   shifts   Shift[]
+//   employees Employee[]
+// }
+
+// model Shift {
+//   id        Int       @id @default(autoincrement())
+//   name      String
+//   shopId    Int
+//   shop      Shop      @relation(fields: [shopId], references: [id])
+//   employees Employee[]
+//   slots     Int
+// }
