@@ -8,7 +8,15 @@ type Emp = {
   surname: String;
   age: number;
   contract: String;
-  availability: String[];
+  availability: {
+    Montag: string;
+    Dienstag: string;
+    Mittwoch: string;
+    Donnerstag: string;
+    Freitag: string;
+    Samstag: string;
+    Sonntag: string;
+  };
   ladenAufgemacht: number;
   ladenAufmachen: Boolean;
   ladenGeschlossen: number;
@@ -27,16 +35,15 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    // Insert employees into the database
     await Promise.all(
       employees.map(async (employee: Emp) => {
-        await prisma.employee.create({
+        // Create the Employee first
+        const createdEmployee = await prisma.employee.create({
           data: {
             name: employee.name,
             surname: employee.surname,
             age: employee.age,
             contract: employee.contract,
-            availability: employee.availability,
             ladenAufgemacht: employee.ladenAufgemacht,
             ladenAufmachen: employee.ladenAufmachen,
             ladenGeschlossen: employee.ladenGeschlossen,
@@ -51,9 +58,22 @@ async function main() {
             pitstopSchliessen: employee.pitstopSchliessen,
           },
         });
+
+        // Then create the Availability related to the Employee
+        await prisma.availability.create({
+          data: {
+            employeeId: createdEmployee.id,
+            Montag: employee.availability.Montag,
+            Dienstag: employee.availability.Dienstag,
+            Mittwoch: employee.availability.Mittwoch,
+            Donnerstag: employee.availability.Donnerstag,
+            Freitag: employee.availability.Freitag,
+            Samstag: employee.availability.Samstag,
+            Sonntag: employee.availability.Sonntag,
+          },
+        });
       })
     );
-
     console.log("Data successfully imported");
   } catch (error) {
     console.error("Error importing data:", error);

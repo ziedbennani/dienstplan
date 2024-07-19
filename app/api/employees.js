@@ -7,19 +7,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { day, availability } = req.query;
+  // const { day, availability } = req.query;
 
-  if (!day || !availability) {
-    return res.status(400).json({ message: "Missing query parameters" });
-  }
+  // if (!day || !availability) {
+  //   return res.status(400).json({ message: "Missing query parameters" });
+  // }
 
   try {
     const employees = await prisma.employee.findMany({
-      where: {
-        availability: {
-          has: availability,
-        },
-      },
+      include: { availability: true },
     });
 
     res.status(200).json(employees);
