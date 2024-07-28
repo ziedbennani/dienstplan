@@ -1,6 +1,22 @@
 "use client";
 
+import axios, { AxiosError } from "axios";
+
 import { ColumnDef } from "@tanstack/react-table";
+import { CircleCheck, CircleX } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
+
+import { Button } from "./../../components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./../../components/ui/dropdown-menu";
+import { deleteEmployeeById } from "../../lib/prismaFunctions";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -33,17 +49,32 @@ export type Mitarbeiter = {
   pitstopGeschlossen: number;
   pitstopSchliessen: Boolean;
 };
+
+const deleteEmployee = async (id: number) => {
+  console.log(`Deleting employee with ID ${id}`);
+  try {
+    const response = await axios.delete(`api/employees/${id}`);
+    console.log(response.data);
+  } catch (error: any) {
+    console.error(`Error deleting employee: ${error.message}`);
+  }
+};
+
 export const columns: ColumnDef<Mitarbeiter>[] = [
   {
     header: "Name",
     accessorKey: "name",
   },
   {
-    header: "Age",
+    header: "Nachname",
+    accessorKey: "surname",
+  },
+  {
+    header: "Alter",
     accessorKey: "age",
   },
   {
-    header: "availability",
+    header: "Wünschzeiten",
     accessorKey: "availability",
     cell: ({ row }) => {
       const days = row.getValue("availability") as Availability;
@@ -76,6 +107,175 @@ export const columns: ColumnDef<Mitarbeiter>[] = [
               );
             })}
         </div>
+      );
+    },
+  },
+  {
+    header: "Laden",
+    columns: [
+      {
+        header: "Aufmachen",
+        accessorKey: "ladenAufmachen",
+        cell: ({ row }) => {
+          const value = row.getValue("ladenAufmachen");
+          return value === true ? (
+            <CircleCheck
+              size={20}
+              color="white"
+              className="rounded-full bg-green-400 "
+            />
+          ) : (
+            <CircleX
+              size={20}
+              color="white"
+              className="rounded-full bg-red-400 "
+            />
+          );
+        },
+      },
+      {
+        header: "Schliessen",
+        accessorKey: "ladenSchliessen",
+        cell: ({ row }) => {
+          const value = row.getValue("ladenSchliessen");
+          return value === true ? (
+            <CircleCheck
+              size={20}
+              color="white"
+              className="rounded-full bg-green-400 "
+            />
+          ) : (
+            <CircleX
+              size={20}
+              color="white"
+              className="rounded-full bg-red-400 "
+            />
+          );
+        },
+      },
+    ],
+  },
+  {
+    header: "Transit",
+    columns: [
+      {
+        header: "Aufmachen",
+        accessorKey: "transitAufmachen",
+        cell: ({ row }) => {
+          const value = row.getValue("transitAufmachen");
+          return value === true ? (
+            <CircleCheck
+              size={20}
+              color="white"
+              className="rounded-full bg-green-400 "
+            />
+          ) : (
+            <CircleX
+              size={20}
+              color="white"
+              className="rounded-full bg-red-400 "
+            />
+          );
+        },
+      },
+      {
+        header: "Schliessen",
+        accessorKey: "transitSchliessen",
+        cell: ({ row }) => {
+          const value = row.getValue("transitSchliessen");
+          return value === true ? (
+            <CircleCheck
+              size={20}
+              color="white"
+              className="rounded-full bg-green-400 "
+            />
+          ) : (
+            <CircleX
+              size={20}
+              color="white"
+              className="rounded-full bg-red-400 "
+            />
+          );
+        },
+      },
+    ],
+  },
+  {
+    header: "Pit Stop",
+    columns: [
+      {
+        header: "Aufmachen",
+        accessorKey: "pitstopAufmachen",
+        cell: ({ row }) => {
+          const value = row.getValue("pitstopAufmachen");
+          return value === true ? (
+            <CircleCheck
+              size={20}
+              color="white"
+              className="rounded-full bg-green-400 "
+            />
+          ) : (
+            <CircleX
+              size={20}
+              color="white"
+              className="rounded-full bg-red-400 "
+            />
+          );
+        },
+      },
+      {
+        header: "Schliessen",
+        accessorKey: "pitstopSchliessen",
+        cell: ({ row }) => {
+          const value = row.getValue("pitstopSchliessen");
+          return value === true ? (
+            <CircleCheck
+              size={20}
+              color="white"
+              className="rounded-full bg-green-400 "
+            />
+          ) : (
+            <CircleX
+              size={20}
+              color="white"
+              className="rounded-full bg-red-400 "
+            />
+          );
+        },
+      },
+    ],
+  },
+  {
+    header: "Actions",
+    id: "actions",
+    cell: ({ row }) => {
+      const employeeId = row.original.id;
+      const router = useRouter();
+
+      const handleDelete = async () => {
+        try {
+          await fetch(`/api/employees/${employeeId}`, {
+            method: "DELETE",
+          });
+          router.refresh();
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
+            {/* <DropdownMenuSeparator /> */}
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },

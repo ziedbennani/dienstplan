@@ -27,7 +27,7 @@
     "**/*.tsx",
     "prisma/**/*.ts",
     ".next/types/**/*.ts",
-    "app/api/employees.js"
+    "app/api/employees/index.ts"
   ],
   "exclude": ["node_modules"]
 }
