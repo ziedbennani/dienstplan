@@ -31,33 +31,23 @@ export type Availability = {
 };
 export type Mitarbeiter = {
   id: number;
-  name: String;
-  surname: String;
+  name: string;
+  surname: string;
   age: number;
-  contract: String;
+  contract: string | null;
   availability: Availability | null;
   ladenAufgemacht: number;
-  ladenAufmachen: Boolean;
+  ladenAufmachen: boolean | null;
   ladenGeschlossen: number;
-  ladenSchliessen: Boolean;
+  ladenSchliessen: boolean | null;
   transitAufgemacht: number;
-  transitAufmachen: Boolean;
+  transitAufmachen: boolean | null;
   transitGeschlossen: number;
-  transitSchliessen: Boolean;
+  transitSchliessen: boolean | null;
   pitstopAufgemacht: number;
-  pitstopAufmachen: Boolean;
+  pitstopAufmachen: boolean | null;
   pitstopGeschlossen: number;
-  pitstopSchliessen: Boolean;
-};
-
-const deleteEmployee = async (id: number) => {
-  console.log(`Deleting employee with ID ${id}`);
-  try {
-    const response = await axios.delete(`api/employees/${id}`);
-    console.log(response.data);
-  } catch (error: any) {
-    console.error(`Error deleting employee: ${error.message}`);
-  }
+  pitstopSchliessen: boolean | null;
 };
 
 export const columns: ColumnDef<Mitarbeiter>[] = [
@@ -246,7 +236,7 @@ export const columns: ColumnDef<Mitarbeiter>[] = [
     ],
   },
   {
-    header: "Actions",
+    header: "",
     id: "actions",
     cell: ({ row }) => {
       const employeeId = row.original.id;
@@ -273,7 +263,6 @@ export const columns: ColumnDef<Mitarbeiter>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
-            {/* <DropdownMenuSeparator /> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -28,20 +28,20 @@ model Employee {
   name               String
   surname            String
   age                Int
-  contract           String
+  contract           String?
   availability       Availability?  
   ladenAufgemacht    Int
-  ladenAufmachen     Boolean
+  ladenAufmachen     Boolean?
   ladenGeschlossen   Int
-  ladenSchliessen    Boolean
+  ladenSchliessen    Boolean?
   transitAufgemacht  Int
-  transitAufmachen   Boolean
+  transitAufmachen   Boolean?
   transitGeschlossen Int 
-  transitSchliessen  Boolean
+  transitSchliessen  Boolean?
   pitstopAufgemacht  Int
-  pitstopAufmachen   Boolean
+  pitstopAufmachen   Boolean?
   pitstopGeschlossen Int
-  pitstopSchliessen  Boolean
+  pitstopSchliessen  Boolean?
 }
 
 model Availability {

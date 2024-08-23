@@ -407,4 +407,15 @@ const employees = [
   },
 ];
 
-module.exports = { employees };
+export const ladenAufmachen = [
+  {
+    value: "ja",
+    label: "kann Aufmachen",
+  },
+  {
+    value: "nein",
+    label: "kann nicht Aufmachen",
+  },
+];
+
+// module.exports = { employees, statuses };
