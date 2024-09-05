@@ -1,7 +1,5 @@
 "use client";
 
-import axios, { AxiosError } from "axios";
-
 import { ColumnDef } from "@tanstack/react-table";
 import { CircleCheck, CircleX } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
@@ -15,8 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./../../components/ui/dropdown-menu";
-import { deleteEmployeeById } from "../../lib/prismaFunctions";
-import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -240,14 +236,14 @@ export const columns: ColumnDef<Mitarbeiter>[] = [
     id: "actions",
     cell: ({ row }) => {
       const employeeId = row.original.id;
-      const router = useRouter();
 
       const handleDelete = async () => {
         try {
           await fetch(`/api/employees/${employeeId}`, {
             method: "DELETE",
           });
-          router.refresh();
+          // router.refresh();
+          location.reload();
         } catch (e) {
           console.log(e);
         }
@@ -261,8 +257,8 @@ export const columns: ColumnDef<Mitarbeiter>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
+            <DropdownMenuLabel>Optionen</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleDelete}>Löschen</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

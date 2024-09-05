@@ -25,7 +25,6 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Checkbox } from "../../components/ui/checkbox";
-import { useRouter } from "next/navigation";
 
 const availability = [
   {
@@ -73,8 +72,6 @@ const formSchema = z.object({
 });
 
 export function ProfileForm({ setDialogOpen }: any) {
-  const router = useRouter();
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -131,7 +128,7 @@ export function ProfileForm({ setDialogOpen }: any) {
         body: JSON.stringify(dataToSend),
       });
       setDialogOpen(false);
-      router.refresh();
+      location.reload();
     } catch (error) {
       console.error(error);
     }

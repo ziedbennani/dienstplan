@@ -38,13 +38,15 @@ export default function OverviewPage() {
         <AlertDescription>
           der erste Teil der Anwendung ist die Mitarbeitertabelle mit
           Filteroptionen und der zweite Teil, der sich noch in der Entwicklung
-          befindet, soll mit nur einer Button einen Stundenplan für alle 3
-          Filiale 'Laden, Transit und PitStop' entsprechend den Wünschzeiten und
-          Fähigkeiten jedes Mitarbeiters erstellen
+          befindet, soll mit nur einer Button einen Mitarbeiter Dienstplan für
+          alle 3 Filiale 'Laden, Transit und PitStop' entsprechend den
+          Wünschzeiten und Fähigkeiten jedes Mitarbeiters erstellen
         </AlertDescription>
       </Alert>
       <DataTable columns={columns} data={data} />
-      <Button variant="default">Plan generieren (coming soon)</Button>
+      <Button variant="default" className="mx-auto my-4 flex">
+        Dienstplan generieren ( coming soon )
+      </Button>
     </div>
   );
 }
