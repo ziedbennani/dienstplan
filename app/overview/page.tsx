@@ -39,7 +39,7 @@ export default function OverviewPage() {
           der erste Teil der Anwendung ist die Mitarbeitertabelle mit
           Filteroptionen und der zweite Teil, der sich noch in der Entwicklung
           befindet, soll mit nur einer Button einen Mitarbeiter Dienstplan für
-          alle 3 Filiale 'Laden, Transit und PitStop' entsprechend den
+          alle 3 Filiale: Laden, Transit und PitStop entsprechend den
           Wünschzeiten und Fähigkeiten jedes Mitarbeiters erstellen
         </AlertDescription>
       </Alert>
