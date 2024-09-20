@@ -25,6 +25,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Checkbox } from "../../components/ui/checkbox";
+import { useFilterStore } from "../../store/store";
 
 const availability = [
   {
@@ -57,8 +58,8 @@ const availability = [
   },
 ];
 const formSchema = z.object({
-  name: z.string().min(2).max(10),
-  surname: z.string().min(2).max(10),
+  name: z.string().min(2).max(15),
+  surname: z.string().min(2).max(15),
   age: z.string().min(1),
   availability: z
     .array(z.string())
@@ -72,6 +73,8 @@ const formSchema = z.object({
 });
 
 export function ProfileForm({ setDialogOpen }: any) {
+  const setLoading = useFilterStore((state) => state.setLoading);
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,6 +94,8 @@ export function ProfileForm({ setDialogOpen }: any) {
 
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setDialogOpen(false);
+    setLoading(true);
     console.log({ values });
     const availabilityMap = {
       Montag: values.availability.includes("mo") ? "green" : "red",
@@ -108,17 +113,19 @@ export function ProfileForm({ setDialogOpen }: any) {
       age: parseInt(values.age),
       availability: availabilityMap,
       ladenAufgemacht: parseInt(values.ladenAufgemacht),
-      ladenAufmachen: parseInt(values.ladenAufgemacht) > 2 ? true : false,
+      ladenAufmachen: parseInt(values.ladenAufgemacht) >= 2 ? true : false,
       ladenGeschlossen: parseInt(values.ladenGeschlossen),
-      ladenSchliessen: parseInt(values.ladenGeschlossen) > 5 ? true : false,
+      ladenSchliessen: parseInt(values.ladenGeschlossen) >= 5 ? true : false,
       transitAufgemacht: parseInt(values.transitAufgemacht),
-      transitAufmachen: parseInt(values.transitAufgemacht) > 1 ? true : false,
+      transitAufmachen: parseInt(values.transitAufgemacht) >= 1 ? true : false,
       transitGeschlossen: parseInt(values.transitGeschlossen),
-      transitSchliessen: parseInt(values.transitGeschlossen) > 2 ? true : false,
+      transitSchliessen:
+        parseInt(values.transitGeschlossen) >= 2 ? true : false,
       pitstopAufgemacht: parseInt(values.pitstopAufgemacht),
-      pitstopAufmachen: parseInt(values.pitstopAufgemacht) > 2 ? true : false,
+      pitstopAufmachen: parseInt(values.pitstopAufgemacht) >= 2 ? true : false,
       pitstopGeschlossen: parseInt(values.pitstopGeschlossen),
-      pitstopSchliessen: parseInt(values.pitstopGeschlossen) > 5 ? true : false,
+      pitstopSchliessen:
+        parseInt(values.pitstopGeschlossen) >= 4 ? true : false,
     };
 
     try {
@@ -127,10 +134,11 @@ export function ProfileForm({ setDialogOpen }: any) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataToSend),
       });
-      setDialogOpen(false);
       location.reload();
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -235,6 +243,7 @@ export function ProfileForm({ setDialogOpen }: any) {
                   <FormControl>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Laden aufgemacht"
                       {...field}
                     />
@@ -254,6 +263,7 @@ export function ProfileForm({ setDialogOpen }: any) {
                   <FormControl>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Laden zugemacht"
                       {...field}
                     />
@@ -272,6 +282,7 @@ export function ProfileForm({ setDialogOpen }: any) {
                   <FormControl>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Transit aufgemacht"
                       {...field}
                     />
@@ -290,6 +301,7 @@ export function ProfileForm({ setDialogOpen }: any) {
                   <FormControl>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Transit zugemacht"
                       {...field}
                     />
@@ -308,6 +320,7 @@ export function ProfileForm({ setDialogOpen }: any) {
                   <FormControl>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Pit Stop aufgemacht"
                       {...field}
                     />
@@ -326,6 +339,7 @@ export function ProfileForm({ setDialogOpen }: any) {
                   <FormControl>
                     <Input
                       type="number"
+                      min={0}
                       placeholder="Pit Stop zugemacht"
                       {...field}
                     />
