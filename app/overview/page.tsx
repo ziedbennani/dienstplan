@@ -19,10 +19,13 @@ import { Button } from "../../components/ui/button";
 export default function OverviewPage() {
   const data = useFilterStore((state) => state.data);
   const setData = useFilterStore((state) => state.setData);
+  const loading = useFilterStore((state) => state.loading);
+  const setLoading = useFilterStore((state) => state.setLoading);
   console.log("page Data : ", data);
 
   const fetchData = async () => {
     let employees = await fetchEmployees();
+    if (employees) setLoading(false);
     setData(employees);
   };
 

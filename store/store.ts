@@ -7,6 +7,8 @@ interface FilterStore {
   setData: (data: any[]) => void;
   triggered: boolean;
   setTriggered: (columns: boolean) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 }
 
 // Create the store
@@ -17,4 +19,6 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setData: (data) => set({ data }),
   triggered: true,
   setTriggered: (triggered) => set({ triggered }),
+  loading: true,
+  setLoading: (loading) => set({ loading }),
 }));

@@ -62,9 +62,10 @@ const FormSchema = z.object({
 });
 
 export function DropdownFilter() {
-  //   const filters = useFilterStore((state) => state.filters);
-  //   const setFilters = useFilterStore((state) => state.setFilters);
+  const loading = useFilterStore((state) => state.loading);
+  const setLoading = useFilterStore((state) => state.setLoading);
   const setData = useFilterStore((state) => state.setData);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -75,6 +76,8 @@ export function DropdownFilter() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setIsOpen(false);
+    setLoading(true);
     console.log("onSubmit data:", data);
     const params = new URLSearchParams();
     data.items.forEach((item) => params.append("items", item));
@@ -90,11 +93,34 @@ export function DropdownFilter() {
       router.refresh();
     } catch (error) {
       console.error("ERROR FETCHING DATA : ", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleReset() {
+    form.reset(); // Reset the form (clear checkboxes)
+    setIsOpen(false); // Close the dropdown
+    setLoading(true); // Show loading state while fetching unfiltered data
+
+    try {
+      // Fetch the initial data (without filters)
+      const response = await fetch(`/api/filter`, {
+        method: "GET",
+      });
+      const result = await response.json();
+      console.log("Unfiltered Data:", result);
+      setData(result.employees); // Set the unfiltered data
+      router.refresh();
+    } catch (error) {
+      console.error("ERROR FETCHING INITIAL DATA: ", error);
+    } finally {
+      setLoading(false); // Stop loading state
     }
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="default">Filter</Button>
       </DropdownMenuTrigger>
@@ -146,6 +172,9 @@ export function DropdownFilter() {
               )}
             />
             <Button type="submit">Submit</Button>
+            <Button type="button" variant="secondary" onClick={handleReset}>
+              Reset
+            </Button>
           </form>
         </Form>
       </DropdownMenuContent>

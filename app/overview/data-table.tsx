@@ -19,6 +19,9 @@ import {
 } from "./../../components/ui/table";
 import React from "react";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { Loader2 } from "lucide-react";
+import { Skeleton } from "./../../components/ui/skeleton";
+import { useFilterStore } from "../../store/store";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,6 +45,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
+  const loading = useFilterStore((state) => state.loading);
 
   return (
     <div>
@@ -85,12 +89,16 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
+            ) : loading == true ? (
+              <TableRow>
+                <TableCell colSpan={10} className="h-24 text-center">
+                  <Loader2 className="mx-auto h-10 w-10 animate-spin" />
+                </TableCell>
+              </TableRow>
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center">
-                  No results.
+                <TableCell colSpan={10} className="h-24 text-center">
+                  kein Ergebnis
                 </TableCell>
               </TableRow>
             )}
@@ -100,3 +108,5 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
+
+// <Loader2 className="mr-2 h-10 w-10 animate-spin" />
